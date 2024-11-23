@@ -1,11 +1,55 @@
 from rest_framework import serializers
 from .models import User, Artwork, Bid, Transcaction, Exhibition,Notification
 
+
 # Serializer for User model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','username','email','role','first_name','last_name']
+
+
+# serializers.py
+from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
+from .models import User  # Apne custom User model ka import karein
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password', 'role', 'first_name', 'last_name']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    def create(self, validated_data):
+        # Password ko hash karein
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+
+
+
+# serializers.py
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # User object lein
+        user = self.user
+        
+        # Role verify karein
+        if user.role == 'Customer' or user.role == 'Artist':
+            data['role'] = user.role
+        else:
+            raise serializers.ValidationError("Invalid role. Only 'Customer' or 'Artist' can log in.")
+
+        return data
+
+
+
 
 # Serializer for Artwork model
 class ArtworkSerializer(serializers.ModelSerializer):
