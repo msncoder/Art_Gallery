@@ -18,6 +18,21 @@ from django.contrib import admin
 from django.urls import path
 from art.views import GroupBasedUserRegistrationView,LoginView,LogoutView
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.urls import path, include
+from django.conf import settings
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+
+
+swagger_view = get_schema_view(
+    openapi.Info(
+        title="Student API Documentation",
+        default_version='v1',
+        description="This API provides endpoints of Student API",
+    ),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),  
@@ -25,5 +40,6 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('swagger/', swagger_view.with_ui('swagger')),
 
 ]
