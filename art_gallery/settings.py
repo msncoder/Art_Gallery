@@ -46,11 +46,17 @@ INSTALLED_APPS = [
 
 
 from datetime import timedelta
-
 REST_FRAMEWORK = {
+    # Authentication classes
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    
+    # Renderer classes
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
 }
 
 SIMPLE_JWT = {

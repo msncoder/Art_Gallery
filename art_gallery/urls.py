@@ -22,17 +22,21 @@ from django.urls import path, include
 from django.conf import settings
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework.permissions import AllowAny
 
 
 
 
-swagger_view = get_schema_view(
+schema_view = get_schema_view(
     openapi.Info(
-        title="Student API Documentation",
+        title="API Documentation",
         default_version='v1',
-        description="This API provides endpoints of Student API",
+        description="API documentation with Swagger",
     ),
+    public=True,
+    permission_classes=(AllowAny,),
 )
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),  
@@ -40,6 +44,5 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
-    path('swagger/', swagger_view.with_ui('swagger')),
-
+    path('swagger/', schema_view.with_ui('swagger')),
 ]

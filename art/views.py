@@ -5,10 +5,16 @@ from rest_framework import status
 from .serializers import GroupBasedUserRegistrationSerializer
 from .serializers import LoginSerializer
 from .serializers import LogoutSerializer
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 
 class GroupBasedUserRegistrationView(APIView):
+
+    serializer_class = GroupBasedUserRegistrationSerializer
+    @swagger_auto_schema(request_body=GroupBasedUserRegistrationSerializer)
+
     def post(self, request, *args, **kwargs):
         serializer = GroupBasedUserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -19,6 +25,10 @@ class GroupBasedUserRegistrationView(APIView):
 
 
 class LoginView(APIView):
+    
+    serializer_class = LoginSerializer
+    @swagger_auto_schema(request_body=LoginSerializer)
+
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -32,6 +42,10 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
+
+    serializer_class = LogoutSerializer
+    @swagger_auto_schema(request_body=LogoutSerializer)
+
     def post(self, request, *args, **kwargs):
         serializer = LogoutSerializer(data=request.data)
         if serializer.is_valid():
