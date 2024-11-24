@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from art.views import GroupBasedUserRegistrationView,LoginView,LogoutView
 from rest_framework_simplejwt.views import TokenRefreshView
 from django.urls import path, include
 from django.conf import settings
@@ -40,9 +39,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),  
-    path('api/register/', GroupBasedUserRegistrationView.as_view(), name='group_based_user_register'),
-    path('api/login/', LoginView.as_view(), name='login'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/', include('authentications.urls')),
     path('swagger/', schema_view.with_ui('swagger')),
 ]

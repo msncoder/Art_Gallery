@@ -50,7 +50,7 @@ class Bid(models.Model):
     def __str__(self):
         return f"{self.bidder.username} + ' - ' + {self.artwork.title}"
     
-class Transcaction(models.Model):
+class Transaction(models.Model):
     Payment_Method_Choices = [
         ('Credit Card', 'Credit Card'),
         ('Debit Card', 'Debit Card'),
