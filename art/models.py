@@ -44,8 +44,25 @@ class Artwork(models.Model):
 class Bid(models.Model):
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
     bid_date = models.DateTimeField(auto_now_add=True)
-    bidder = models.ForeignKey(User,on_delete=models.CASCADE,related_name='bids')
-    artwork = models.ForeignKey(Artwork,on_delete=models.CASCADE,related_name='bids')
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bids')
+    artwork = models.ForeignKey(Artwork, on_delete=models.CASCADE, related_name='bids')
+
+    def save(self, *args, **kwargs):
+        # Get the highest bid for this artwork
+        highest_bid = Bid.objects.filter(artwork=self.artwork).order_by('-bid_amount').first()
+
+        if highest_bid:
+            # Ensure the new bid is higher than the current highest bid
+            if self.bid_amount <= highest_bid.bid_amount:
+                raise ValueError("Your bid must be higher than the current highest bid.")
+        else:
+            # Ensure the first bid is higher than the artwork price
+            if self.bid_amount <= self.artwork.price:
+                raise ValueError("Your bid must be higher than the artwork's price.")
+
+        super().save(*args, **kwargs)
+
+
 
     def __str__(self):
         return f"{self.bidder.username} + ' - ' + {self.artwork.title}"

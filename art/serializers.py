@@ -10,8 +10,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-
-
 # Serializer for Artwork model
 class ArtworkSerializer(serializers.ModelSerializer):
     uploaded_by = UserSerializer(read_only=True)
